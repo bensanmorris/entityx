@@ -47,24 +47,11 @@ class _entityxExport BasePool {
   }
 
   inline void reserve(std::size_t n) {
-      size_t required_size = n * element_size_;
-      if(required_size > chunk_size_)
-      {
-        size_t chunk_count = required_size / chunk_size_;
-        if(required_size % chunk_size_ > 0)
-            chunk_count++;
-        required_size = chunk_count * chunk_size_;
-      }
-      else
-      {
-        required_size = chunk_size_;
-      }
-      if(capacity_ < required_size)
-      {
-        char *chunk = new char[required_size];
-        blocks_.push_back(chunk);
-        capacity_ += required_size;
-      }
+    while (capacity_ < n) {
+      char *chunk = new char[element_size_ * chunk_size_];
+      blocks_.push_back(chunk);
+      capacity_ += chunk_size_;
+    }
   }
 
   inline void *get(std::size_t n) {
