@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <algorithm>
 #include <cstddef>
 #include <cassert>
 #include <vector>
@@ -51,18 +50,21 @@ class _entityxExport BasePool {
       size_t required_size = n * element_size_;
       if(required_size > chunk_size_)
       {
-          size_t chunk_count = required_size / chunk_size_;
-          if(required_size % chunk_size_ > 0)
-              chunk_count++;
-          required_size = chunk_count * chunk_size_;
+        size_t chunk_count = required_size / chunk_size_;
+        if(required_size % chunk_size_ > 0)
+            chunk_count++;
+        required_size = chunk_count * chunk_size_;
       }
       else
       {
-          required_size = std::max(required_size, chunk_size_);
+        required_size = chunk_size_;
       }
-      char *chunk = new char[required_size];
-      blocks_.push_back(chunk);
-      capacity_ += required_size;
+      if(capacity_ < required_size)
+      {
+        char *chunk = new char[required_size];
+        blocks_.push_back(chunk);
+        capacity_ += required_size;
+      }
   }
 
   inline void *get(std::size_t n) {
