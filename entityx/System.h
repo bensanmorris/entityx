@@ -93,7 +93,7 @@ private:
       typeMap_[key] = family_counter_++;
     Family family = (uint32_t)typeMap_[key];
 #ifndef NDEBUG
-    std::cout << "BaseSystem::Family System<C>::family:" << typeid(C).name() << " counter = " << family << std::endl;
+    std::cout << "BaseSystem::Family System<C>::family:" << typeid(Derived).name() << " counter = " << family << std::endl;
 #endif
 #else
     static Family family = family_counter_++;
